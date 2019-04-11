@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from design import Ui_MainWindow  # импорт сгенерированного файла дизайна
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -13,6 +13,10 @@ class MyInterface(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.setWindowTitle('Nesuperzalupa')
+        self.icon = QtGui.QIcon()
+        self.icon.addPixmap(QtGui.QPixmap('chest.ico'), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(self.icon)
         self.fig = self.graph()
         self.gl = QtWidgets.QGridLayout(self.ui.widget)
         self.gl.setContentsMargins(2, 2, 0, 0)
@@ -33,8 +37,8 @@ class MyInterface(QtWidgets.QMainWindow):
                      'color': 'darkblue',
                      'size': 12}
 
-        plt.xlabel('Диаметр резьбы')
-        plt.ylabel('Шаг резьбы')
+        plt.xlabel('Диаметр резьбы, мм')
+        plt.ylabel('Шаг резьбы, мм')
         plt.text(150, 8.1, '1°', fontdict=font_dict)
         plt.text(70, 8.1, '2°', fontdict=font_dict)
         plt.text(47, 8.1, '3°', fontdict=font_dict)
@@ -53,7 +57,6 @@ class MyInterface(QtWidgets.QMainWindow):
         plt.plot([0, formula(8.5, 3.5)], [0, 8.5], 'k', linewidth=0.5)
         plt.plot([0, formula(8.5, 4.5)], [0, 8.5], 'k', linewidth=0.5)
         if diameter and step:
-            print(diameter, step)
             plt.scatter(diameter, step, color='darkred', s=40, marker='x')
             plt.text(diameter + 3, step + .2, f'{self.if_int(str(diameter))}x{self.if_int(str(step))}', color='darkred', weight='medium', size=12)
         plt.grid(True)   # линии вспомогательной сетки
@@ -71,8 +74,16 @@ class MyInterface(QtWidgets.QMainWindow):
         diameter = self.ui.diameter_input.text()
         step = self.ui.step_input.text()
         step = step.replace(',', '.')
-        if not diameter.replace('.', '').isdigit() or not step.replace('.', '').isdigit():
-            pass
+        if not diameter.replace('.', '').isdigit() or not step.replace('.', '').isdigit() or diameter.count('.') >= 2 or diameter.count(',') >= 2 or step.count('.') >= 2 or step.count(',') >= 2:
+            self.ui.diameter_input_2.setText('')
+            self.ui.step_input_2.setText('')
+            self.ui.statusbar.showMessage('Указанные параметры неверны!')
+            self.gl.removeWidget(self.canvas)
+            self.fig = self.graph()
+            self.canvas = Canvas(self.fig)
+            self.gl.addWidget(self.canvas)
+            self.gl.update()
+            self.ui.widget.update()
         else:
             diameter, step = float(diameter), float(step)
             # h = (0.5 * step * math.tan(math.radians(60)))
@@ -87,22 +98,21 @@ class MyInterface(QtWidgets.QMainWindow):
             self.gl.addWidget(self.canvas)
             self.gl.update()
             self.ui.widget.update()
+            self.ui.statusbar.showMessage(f'Рекомендованная опорная пластина: {int(round(result if result <= 5 else 5))}°')
 
 
 class Canvas(FigureCanvas):
     def __init__(self, fig, parent=None):
         self.fig = fig
         FigureCanvas.__init__(self, self.fig)
-        print('1')
-        # FigureCanvas.setSizePolicy(self, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
-    # splash = QtWidgets.QSplashScreen(QtGui.QPixmap(os.path.join(programm_dir, 'misc', 'img.png')))
-    # splash.show()
+    splash = QtWidgets.QSplashScreen(QtGui.QPixmap('splash.png'))
+    splash.show()
     application = MyInterface()
     application.show()
-    # splash.finish(application)
+    splash.finish(application)
 sys.exit(app.exec())

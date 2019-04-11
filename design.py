@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 581)
+        MainWindow.resize(810, 581)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -139,7 +139,7 @@ class Ui_MainWindow(object):
         self.button_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.button_frame.setObjectName("button_frame")
         self.pushButton = QtWidgets.QPushButton(self.button_frame)
-        self.pushButton.setGeometry(QtCore.QRect(280, 10, 221, 41))
+        self.pushButton.setGeometry(QtCore.QRect(290, 10, 221, 41))
         self.pushButton.setStyleSheet("font: 14pt \"Century Gothic\";")
         self.pushButton.setObjectName("pushButton")
         self.gridLayout.addWidget(self.button_frame, 2, 0, 1, 2)
