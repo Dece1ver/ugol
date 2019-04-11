@@ -169,4 +169,4 @@ class Ui_MainWindow(object):
         self.diameter_label_4.setText(_translate("MainWindow", "<html><head/><body><p>°</p></body></html>"))
         self.step_label_3.setText(_translate("MainWindow", "<html><head/><body><p>°</p></body></html>"))
         self.step_label_4.setText(_translate("MainWindow", "<html><head/><body><p>Пластина:</p></body></html>"))
-        self.pushButton.setText(_translate("MainWindow", "Расчитать"))
+        self.pushButton.setText(_translate("MainWindow", "Рассчитать"))
