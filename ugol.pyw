@@ -80,8 +80,8 @@ class MyInterface(QtWidgets.QMainWindow):
             return string
 
     def calc(self):
-        diameter = self.ui.diameter_input.text()
-        step = self.ui.step_input.text()
+        diameter = self.ui.diameter_input.text().strip()
+        step = self.ui.step_input.text().strip()
         step = step.replace(',', '.')
 
         if not diameter.replace('.', '').isdigit() or not step.replace('.', '').isdigit() or diameter.count('.') >= 2 or diameter.count(',') >= 2 or step.count('.') >= 2 or step.count(',') >= 2 or float(diameter) > 220 or float(step) > 8.5 or float(diameter) == 0 or float(step) == 0:
